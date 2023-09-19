@@ -1,0 +1,52 @@
+<p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<p>Signed as <%= Current.user.email %></p>
+
+<h2>Login and verification</h2>
+
+<div>
+  <%= link_to "Change password", edit_password_path %>
+</div>
+
+<div>
+  <%= link_to "Change email address", edit_identity_email_path %>
+</div>
+
+<h2>Passkeys</h2>
+
+<ul>
+  <% Current.user.webauthn_credentials.each do |webauthn_credential| %>
+    <li>
+      <%= webauthn_credential.nickname %>
+      <%= form_with url: webauthn_remove_path, method: :post do |f| %>
+        <%= f.hidden_field :webauthn_id, value: webauthn_credential.webauthn_id %>
+        <%= f.submit "Delete" %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<%= form_with url: webauthn_setup_path, method: :post, data: { controller: 'webauthn', webauthn_data_value: @webauthn_params[:webauthn_setup].to_json } do |f| %>
+  <%= f.hidden_field :webauthn_setup, data: { webauthn_target: "result" } %>
+  <%= f.hidden_field :webauthn_setup_challenge, value: @webauthn_params[:webauthn_setup_challenge] %>
+  <%= f.hidden_field :webauthn_setup_challenge_hmac, value: @webauthn_params[:webauthn_setup_challenge_hmac] %>
+
+  <%= f.text_field :nickname, placeholder: 'e.g iCloud Key' %>
+
+  <%= f.submit "Create Passkey", data: { action: "webauthn#setup:prevent" } %>
+<% end %>
+
+<% if @wehauthn_error %>
+  <p>Passkey fail</p>
+<% end %>
+
+<h2>Access history</h2>
+
+<div>
+  <%= link_to "Devices & Sessions", sessions_path %>
+</div>
+
+<br>
+
+<%= button_to "Log out", Current.session, method: :delete %>

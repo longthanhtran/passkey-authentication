@@ -1,0 +1,37 @@
+<p style="color: green"><%= notice %></p>
+<p style="color: red"><%= alert %></p>
+
+<h1>Sign in</h1>
+
+<%= form_with(url: sign_in_path) do |form| %>
+  <div>
+    <%= form.label :email, style: "display: block" %>
+    <%= form.email_field :email, value: params[:email_hint], required: true, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div>
+    <%= form.label :password, style: "display: block" %>
+    <%= form.password_field :password, required: true, autocomplete: "current-password" %>
+  </div>
+
+  <div>
+    <%= form.submit "Sign in" %>
+  </div>
+<% end %>
+
+<br>
+
+<%= form_with url: webauthn_auth_path, method: :post, data: { controller: 'webauthn', webauthn_data_value: @webauthn_params[:webauthn_auth].to_json } do |f| %>
+  <%= f.hidden_field :webauthn_auth, data: { webauthn_target: "result" } %>
+  <%= f.hidden_field :webauthn_auth_challenge, value: @webauthn_params[:webauthn_auth_challenge] %>
+  <%= f.hidden_field :webauthn_auth_challenge_hmac, value: @webauthn_params[:webauthn_auth_challenge_hmac] %>
+
+  <%= f.submit "Sign in with passkey", data: { action: "webauthn#auth:prevent" } %>
+<% end %>
+
+<br>
+
+<div>
+  <%= link_to "Sign up", sign_up_path %> |
+  <%= link_to "Forgot your password?", new_identity_password_reset_path %>
+</div>
