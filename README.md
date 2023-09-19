@@ -1,24 +1,11 @@
-# README
+# Rails 7 with Rodauth's passkey login
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+The project is trying to mimic the huge work of [livestream session from Janko Marohnic](https://www.youtube.com/watch?v=yOvjUglyWwc)
 
-Things you may want to cover:
+With this project, we can
 
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+- Sign up
+- Login with normal credential
+- Create a passkey
+- Remove passkey
+- Login with passkey
